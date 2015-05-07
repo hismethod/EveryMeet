@@ -5,9 +5,9 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="C:/Users/JM/Luna/workspaceForAndroid/EveryMeet/libs/engine.io-client-0.4.1.jar" sourcepath="C:/Users/JM/.m2/repository/com/github/nkzawa/engine.io-client/0.4.1/engine.io-client-0.4.1-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/JM/Luna/workspaceForAndroid/EveryMeet/libs/gson-2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/JM/Luna/workspaceForAndroid/EveryMeet/libs/json-org.jar"/>
-	<classpathentry kind="lib" path="C:/Users/JM/Luna/workspaceForAndroid/EveryMeet/libs/socket.io-client-0.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JM/Documents/GitHub/EveryMeet/libs/engine.io-client-0.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JM/Documents/GitHub/EveryMeet/libs/socket.io-client-0.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JM/Documents/GitHub/EveryMeet/libs/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JM/Documents/GitHub/EveryMeet/libs/json-org.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
