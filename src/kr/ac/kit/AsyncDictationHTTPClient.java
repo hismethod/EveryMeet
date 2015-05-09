@@ -343,12 +343,13 @@ public class AsyncDictationHTTPClient extends AsyncTask<String, Void, String>
 			resEntity.consumeContent();
 		}
 	}
+	
+	/*****************************************************
+	 * 여기부터는 AsyncTask의 메소드들
+	 *****************************************************/
 
 	@Override
-	protected void onPreExecute()
-	{
-		
-	}
+	protected void onPreExecute(){}
 
 	@Override
 	protected String doInBackground(String... param)
