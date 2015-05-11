@@ -47,8 +47,7 @@ public class MainActivity extends Activity
 		{
 			public void onClick(View v)
 			{
-				mainController.stopRecord();
-				mainController.startRecord();
+				mainController.stopRecord(true);
 			}
 		});
 

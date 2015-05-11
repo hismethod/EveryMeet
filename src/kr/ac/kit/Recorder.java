@@ -1,8 +1,9 @@
 package kr.ac.kit;
 
 import java.io.File;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -17,6 +18,7 @@ public class Recorder extends MediaRecorder
 	private static String currentFilePath;
 	
 	private boolean isRecording;
+	private List<Integer> volumeList;
 	
 	private RecorderListener recorderListener;
 	
@@ -47,6 +49,7 @@ public class Recorder extends MediaRecorder
 	{
 		// 레코더셋팅
 		isRecording = false;
+		volumeList = new ArrayList<Integer>();
 		setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
 		setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
 		setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
@@ -101,7 +104,7 @@ public class Recorder extends MediaRecorder
 		}
 	}
 	
-	public void stopRecord()
+	public void stopRecord(boolean doDictation)
 	{
 		if(isRecording == false)
 		{
@@ -119,19 +122,33 @@ public class Recorder extends MediaRecorder
 		if(recorderListener != null)
 		{
 			Log.i("Recorder.stopRecord()","stop리스너 호출");
-			recorderListener.onStopRecord();
+			recorderListener.onStopRecord(doDictation);
 		}
+	}
+	
+	public List<Integer> getVolumeList()
+	{
+		return volumeList;
+	}
+	
+	public void addVolumeRecord(int volume)
+	{
+		volumeList.add(volume);
 	}
 	
 	public int getVolumeLevel()
 	{
-		int ratio = getMaxAmplitude() / 600;
-		int db = 0;
-		if (ratio > 1)
-			db = (int) (20 * Math.log10(ratio));
-
-		// (int) (20 * Math.log10(ratio))진폭 및 볼륨 크기 조정
-		// by 주변 소음 가져오는 값 약 300 까지 150
+//		int ratio = getMaxAmplitude();
+//		int db = 0;
+//		if (ratio > 1)
+//			db = (int) (20 * Math.log10(ratio));
+//
+//		// (int) (20 * Math.log10(ratio))진폭 및 볼륨 크기 조정
+//		// by 주변 소음 가져오는 값 약 300 까지 150
+		
+		int db = getMaxAmplitude();
+		
+		addVolumeRecord(db);
 
 		return db;
 	}

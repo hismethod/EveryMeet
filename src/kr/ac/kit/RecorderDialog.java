@@ -48,7 +48,7 @@ public class RecorderDialog extends Dialog
 		}
 		super.dismiss();
 		task.cancel();
-		recorder.stopRecord();
+		recorder.stopRecord(false);
 	}
 
 	private int getDuration()

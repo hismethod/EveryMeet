@@ -2,7 +2,7 @@ package kr.ac.kit;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +22,9 @@ public class MainController
 	private MediaPlayer player = null;
 	private Recorder recorder;
 	
+	long startTime = 0L;
+	long endTime = 0L;
+	
 	/********************   Getter & Setter   **********************/
 	 
 	public String getDialogue()
@@ -37,6 +40,10 @@ public class MainController
 		public void onTaskCompleted(String sentence)
 		{
 			Log.i("RecognizeResponseListener", "onTaskCompleted() 호출");
+			endTime = System.currentTimeMillis();
+			
+			Log.e("RecognizeResponseListener", "인식된문장 : " + sentence + "(" + ( endTime - startTime )/1000.0f + "초전)"); 
+			
 			dialogStringStack.append(sentence);
 			dialogStringStack.append("\n");
 		}
@@ -52,13 +59,19 @@ public class MainController
 		}
 
 		@Override
-		public void onStopRecord()
+		public void onStopRecord(boolean doDictation)
 		{
 			Log.i("RecorderListener", "onStopRecord() 호출");
-			AsyncDictationHTTPClient asyncDictationHTTPClient = new AsyncDictationHTTPClient(listener);
-			asyncDictationHTTPClient.execute(Recorder.getCurrentFilePath());
-			/* execute의 결과로
-			 * RecognizeResponseListner의 onTaskCompleted 콜백 메소드 호출 */
+			if(doDictation)
+			{
+				AsyncDictationHTTPClient asyncDictationHTTPClient = new AsyncDictationHTTPClient(listener);
+				startTime = System.currentTimeMillis();
+				asyncDictationHTTPClient.execute(Recorder.getCurrentFilePath());
+				/* execute의 결과로
+				 * RecognizeResponseListner의 onTaskCompleted 콜백 메소드 호출 */
+			}
+			else
+				return;
 		}
 	};
 	
@@ -79,12 +92,12 @@ public class MainController
 		timer.schedule(task, 100, 200);
 	}
 
-	public void stopRecord()
+	public void stopRecord(boolean doDictation)
 	{
 		task.cancel();
 		if(recorder != null)
 		{Log.i("MainActivity", "TimerTask 취소 및 stopRecord() 진입");
-			recorder.stopRecord();
+			recorder.stopRecord(doDictation);
 			recorder = null;
 		}
 		dialogStringStack.append("*****녹음경계*****");
@@ -133,12 +146,44 @@ public class MainController
 	}
 	
 	/******************* 스레드 관련 *******************/
+	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler()
 	{
+		int time = 0;
+		int continuous = 0;
+		int recentAvg = 0;
+		
 		@Override
 		public void handleMessage(Message msg)
 		{
-			Log.i("volume", msg.what + "");
+			int volume = msg.what;
+			time+=200;
+			recentAvg += volume;
+			
+			Log.i("volume", volume + "");
+			if(time%600==0)
+			{
+				recentAvg /= 3;
+				
+				if(recentAvg <= 6000)
+					continuous++;
+				else
+					continuous = 0;
+				
+				Log.i("최근평균", recentAvg + "");
+				recentAvg = 0;
+			}
+			
+			if(continuous >= 3)
+			{
+				if(time <= 3200)
+					stopRecord(false);
+				else
+					stopRecord(true);
+				time = 0;
+				continuous = 0;
+				startRecord();
+			}
 		}
 	};
 	
