@@ -1,6 +1,7 @@
 package kr.ac.kit;
 
 import java.io.File;
+
 import java.io.IOException;
 
 import android.media.MediaRecorder;
@@ -11,7 +12,7 @@ public class Recorder extends MediaRecorder
 {
 	final private static File RECORDED_FILE = Environment.getExternalStorageDirectory();
 	final private static int MAX_FILE_NO = 5;
-	
+
 	private static int fileNo = 1;
 	private static String currentFilePath;
 	
@@ -124,7 +125,7 @@ public class Recorder extends MediaRecorder
 	
 	public int getVolumeLevel()
 	{
-		int ratio = getMaxAmplitude() / 300;
+		int ratio = getMaxAmplitude() / 600;
 		int db = 0;
 		if (ratio > 1)
 			db = (int) (20 * Math.log10(ratio));
