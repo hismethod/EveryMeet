@@ -1,6 +1,7 @@
 package kr.ac.kit;
 
 import android.app.Activity;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -12,7 +13,6 @@ public class MainActivity extends Activity
 	/* View °´Ã¼µé */
 	private TextView resultView = null;
 	private TextView levelView = null;
-
 	private MainController mainController = null;
 
 	@Override
@@ -22,7 +22,7 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		mainController = new MainController();
-
+		
 		resultView = (TextView) findViewById(R.id.resultView);
 		levelView = (TextView) findViewById(R.id.levelView);
 

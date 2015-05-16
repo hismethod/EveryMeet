@@ -2,6 +2,7 @@ package kr.ac.kit;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -15,7 +16,6 @@ public class MainController
 	private NetworkController networkHandler = new NetworkController();
 
 	/************************ Media °´Ã¼µé *************************/
-	/* private AudioManager audioManager; */
 	private MyTimerTask task = null;
 	private VolumeViewThread levelThread = null;
 	private Timer timer = new Timer();
@@ -176,7 +176,7 @@ public class MainController
 			
 			if(continuous >= 3)
 			{
-				if(time <= 3200)
+				if(time <= 3800)
 					stopRecord(false);
 				else
 					stopRecord(true);
