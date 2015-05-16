@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.listener;
 
 public interface RecorderListener
 {

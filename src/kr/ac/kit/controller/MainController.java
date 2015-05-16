@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.controller;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,6 +8,10 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import kr.ac.kit.listener.RecognizeResponseListener;
+import kr.ac.kit.listener.RecorderListener;
+import kr.ac.kit.util.AsyncDictationHTTPClient;
+import kr.ac.kit.util.Recorder;
 
 public class MainController
 {

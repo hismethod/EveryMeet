@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.List;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.util.Log;
+import kr.ac.kit.listener.RecorderListener;
 
 public class Recorder extends MediaRecorder
 {

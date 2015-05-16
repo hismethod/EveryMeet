@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.controller;
 
 import java.net.URISyntaxException;
 import java.util.Scanner;

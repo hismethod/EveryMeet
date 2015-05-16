@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.util;
 
 /*
  * DictationHTTPClient.java
@@ -58,10 +58,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.xiph.speex.util.streamer.FileAudioStreamer;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import util.streamer.FileAudioStreamer;
+import kr.ac.kit.listener.RecognizeResponseListener;
 
 @SuppressWarnings("deprecation")
 public class AsyncDictationHTTPClient extends AsyncTask<String, Void, String>

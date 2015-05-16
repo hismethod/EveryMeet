@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
+import kr.ac.kit.util.Recorder;
 
 public class RecorderDialog extends Dialog
 {

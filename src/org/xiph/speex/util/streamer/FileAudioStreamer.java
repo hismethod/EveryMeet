@@ -1,4 +1,4 @@
-package util.streamer;
+package org.xiph.speex.util.streamer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 
-import util.audio.JSpeexEnc;
+import org.xiph.speex.util.audio.JSpeexEnc;
 
 /*
  * Nuance Communications Inc.

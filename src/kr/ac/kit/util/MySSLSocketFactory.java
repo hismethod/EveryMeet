@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.util;
 
 import java.io.IOException;
 import java.net.Socket;
