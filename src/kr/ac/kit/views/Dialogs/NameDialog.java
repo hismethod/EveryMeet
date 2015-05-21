@@ -1,16 +1,16 @@
 package kr.ac.kit.views.Dialogs;
 
 import com.gc.materialdesign.views.ButtonFlat;
+import com.rey.material.widget.EditText;
 
 import android.content.Context;
 import android.content.DialogInterface.OnDismissListener;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import kr.ac.kit.R;
 
@@ -29,7 +29,7 @@ public class NameDialog
 	{
 		return name;
 	}
-	
+
 	public void setOnDismissListener(OnDismissListener listener)
 	{
 		nameDialog.setOnDismissListener(listener);
@@ -45,19 +45,6 @@ public class NameDialog
 		nameDialog = dialogBuilder.create();
 		nameDialog.setCancelable(false);                                                                        
 		nameDialog.setCanceledOnTouchOutside(false);
-	}
-	
-	public AlertDialog createDialog(final Context context)
-	{
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-		dialogBuilder.setView(R.layout.dialog_init_name);
-		dialogBuilder.setTitle("당신의 성함은 무엇인가요?");
-		
-		nameDialog = dialogBuilder.create();
-		nameDialog.setCancelable(false);                                                                        
-		nameDialog.setCanceledOnTouchOutside(false);
-		
-		return nameDialog;
 	}
 	
 	public void showDialog()
@@ -82,6 +69,7 @@ public class NameDialog
 				else
 				{
 					initNameBtn.setEnabled(true);
+					initNameBtn.setBackgroundColor(Color.parseColor("#00897B"));
 				}
 			}
 		});

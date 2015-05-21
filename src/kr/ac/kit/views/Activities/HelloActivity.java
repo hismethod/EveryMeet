@@ -17,7 +17,7 @@ import kr.ac.kit.R;
 import kr.ac.kit.views.Dialogs.NameDialog;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends AppCompatActivity
+public class HelloActivity extends AppCompatActivity
 {
 	@ViewById TextView hello;
 	private NameDialog dialog;

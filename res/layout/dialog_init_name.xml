@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="24dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res/kr.ac.kit" >
 
-    <EditText
+    <com.rey.material.widget.EditText
+        style="@style/Material.Widget.EditText"
         android:id="@+id/initName"
+        android:inputType="textPersonName"
+        android:textSize="15sp"
+        app:et_labelEnable="true"
+		app:et_labelTextColor="@color/md_teal_600"        
+		app:et_labelTextSize="13sp"
+        app:et_supportMode="charCounter"
+		app:et_supportTextColor="@color/md_teal_600"
+		app:et_supportMaxChars="10"
+        android:maxLength="10"
+        android:maxLines="1" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:hint="이름을 입력하세요"
-        android:inputType="textPersonName"
-        android:maxLength="10"
-        android:maxLines="1" />
+        android:focusable="true"
+        android:hint="성함을 입력해주세요" />
 
     <com.gc.materialdesign.views.ButtonFlat
         android:id="@+id/initNameBtn"
@@ -24,12 +35,14 @@
         android:layout_height="36dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-
-        android:layout_gravity="right"
+        
+        android:layout_gravity="end"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:text="설정"
-        android:background="@color/accent_material_light" />
-<!--    android:background="#1E88E5"!-->
+        android:textSize="15sp"
+        android:background="#757575" />
+<!--    com.gc.materialdesign.views.ButtonFlat
+app:et_supportMode="charCounter"!-->
 </LinearLayout>

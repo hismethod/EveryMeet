@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">EveryMeet</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_title">환영합니다! 처음이시군요?</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_room">RoomActivity</string>
     <string name="title_activity_test">TestActivity</string>

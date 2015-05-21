@@ -1,4 +1,4 @@
-package kr.ac.kit.views;
+package kr.ac.kit.views.Dialogs;
 
 import java.util.Timer;
 import java.util.TimerTask;
