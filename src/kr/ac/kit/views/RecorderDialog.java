@@ -1,4 +1,4 @@
-package kr.ac.kit;
+package kr.ac.kit.views;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,6 +8,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
+import kr.ac.kit.R;
+import kr.ac.kit.R.id;
+import kr.ac.kit.R.layout;
 import kr.ac.kit.util.Recorder;
 
 public class RecorderDialog extends Dialog
