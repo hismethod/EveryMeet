@@ -7,47 +7,94 @@ import org.androidannotations.annotations.ViewById;
 
 import com.rey.material.widget.EditText;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ScrollView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher.ViewFactory;
 import kr.ac.kit.R;
-import kr.ac.kit.views.Dialogs.NameDialog;
 
-@EActivity(R.layout.activity_main)
+@EActivity(R.layout.activity_hello)
 public class HelloActivity extends AppCompatActivity
 {
-	@ViewById TextView hello;
-	private NameDialog dialog;
+	@ViewById EditText initNameEditText;
+	@ViewById ScrollView scrollView;
+	@ViewById TextSwitcher helloSwitcher;
+	@ViewById TextView helloSwitchText;
 	
+	private String enableString = "";
+	private String disableString = "";
+
+	private TextWatcher textWatcher = new TextWatcher()
+	{
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count){}
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+		@Override
+		public void afterTextChanged(Editable str)
+		{
+			if (isNull(str.toString().trim()))
+			{
+				helloSwitcher.setClickable(false);
+				helloSwitcher.setBackgroundColor(Color.parseColor("#EC407A"));
+			} else
+			{
+				helloSwitcher.setClickable(true);
+				helloSwitcher.setBackgroundColor(Color.parseColor("#FFFFFF"));
+			}
+		}
+	};
+
 	@AfterInject
 	public void doAfterInject()
 	{
-		dialog = new NameDialog(this, "   환영합니다! 성함이 어떻게 되세요?");
 	}
-	
+
 	@AfterViews
 	public void doAfterViews()
 	{
-		dialog.showDialog();
-		dialog.setOnDismissListener(listener);
-	}
-	
-	OnDismissListener listener = new OnDismissListener()
-	{
-		@Override
-		public void onDismiss(DialogInterface di)
+		initNameEditText.addTextChangedListener(textWatcher);
+		initNameEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
 		{
-			/**
-			 * 여기에 사용자의 이름가지고 뭐 어떻게 하는 거 나와야한다
-			 * SharedPreference에 저장하던지 DB에 저장하던지 후처리 할 것.
-			 */
-			hello.setText(dialog.getName());
-		}
-	};
-	
+			@Override
+			public void onGlobalLayout()
+			{
+				if (isKeyboardShown(initNameEditText.getRootView()))
+				{
+					scrollDown();
+				}
+			}
+		});
+		
+		helloSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+		helloSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+		helloSwitcher.setFactory(new ViewFactory()
+		{
+			@Override
+			public View makeView()
+			{
+				helloSwitchText.setTextColor(Color.parseColor(""));
+				helloSwitchText.setGravity(Gravity.CENTER_HORIZONTAL);
+				return helloSwitchText;
+			}
+		});
+		helloSwitcher.setText(disableString);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -69,4 +116,51 @@ public class HelloActivity extends AppCompatActivity
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	/*
+	 * HERE ARE PRIAVTE METHODS
+	 */
+	private void scrollDown()
+	{
+		scrollView.post(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				scrollView.scrollTo(0, 100);
+			}
+		});
+	}
+
+	private boolean isKeyboardShown(View rootView)
+	{
+		/*
+		 * 128dp = 32dp * 4, minimum button height 32dp and generic 4 rows soft
+		 * keyboard
+		 */
+		final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
+
+		Rect r = new Rect();
+		rootView.getWindowVisibleDisplayFrame(r);
+		DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+		/*
+		 * heightDiff = rootView height - status bar height (r.top) - visible
+		 * frame height (r.bottom - r.top)
+		 */
+		int heightDiff = rootView.getBottom() - r.bottom;
+		/* Threshold size: dp to pixels, multiply with display density */
+		boolean isKeyboardShown = heightDiff > SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD * dm.density;
+
+		return isKeyboardShown;
+	}
+
+	private static boolean isNull(String query)
+	{
+		if (query.isEmpty() || query.equals(null))
+		{
+			return true;
+		} else
+			return false;
+	}
+
 }
