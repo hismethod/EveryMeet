@@ -9,12 +9,11 @@ import com.rey.material.widget.EditText;
 
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +21,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.ViewSwitcher.ViewFactory;
 import kr.ac.kit.R;
 
 @EActivity(R.layout.activity_hello)
@@ -32,14 +29,17 @@ public class HelloActivity extends AppCompatActivity
 {
 	@ViewById EditText initNameEditText;
 	@ViewById ScrollView scrollView;
-	@ViewById TextSwitcher helloSwitcher;
 	@ViewById TextView helloSwitchText;
+	@ViewById CardView cardViewSave;
 	
-	private String enableString = "";
-	private String disableString = "";
+	private String enableString = "어플리케이션 시작!";
+	private String disableString = "성함을 입력하시면\n입장하실 수 있어요";
+	
+	Animation fadeIn;
 
 	private TextWatcher textWatcher = new TextWatcher()
 	{
+		int flag = 3;
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count){}
 		@Override
@@ -49,12 +49,22 @@ public class HelloActivity extends AppCompatActivity
 		{
 			if (isNull(str.toString().trim()))
 			{
-				helloSwitcher.setClickable(false);
-				helloSwitcher.setBackgroundColor(Color.parseColor("#EC407A"));
+				if(flag == 0)
+					return;
+				helloSwitchText.setText(disableString);
+				helloSwitchText.startAnimation(fadeIn);
+				//helloSwitchText.setClickable(false);
+				//helloSwitchText.setTextColor(Color.parseColor("#FFFFFF"));
+				flag = 0;
 			} else
 			{
-				helloSwitcher.setClickable(true);
-				helloSwitcher.setBackgroundColor(Color.parseColor("#FFFFFF"));
+				if(flag == 1)
+					return;
+				helloSwitchText.setText(enableString);
+				helloSwitchText.startAnimation(fadeIn);
+				//helloSwitchText.setClickable(true);
+				//helloSwitchText.setTextColor(Color.parseColor("#FFFFFF"));
+				flag = 1;
 			}
 		}
 	};
@@ -67,6 +77,10 @@ public class HelloActivity extends AppCompatActivity
 	@AfterViews
 	public void doAfterViews()
 	{
+		helloSwitchText.setFocusable(true);
+		helloSwitchText.setClickable(true);
+		helloSwitchText.setFocusableInTouchMode(true);
+		initNameEditText.setFocusableInTouchMode(true);
 		initNameEditText.addTextChangedListener(textWatcher);
 		initNameEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
 		{
@@ -79,20 +93,7 @@ public class HelloActivity extends AppCompatActivity
 				}
 			}
 		});
-		
-		helloSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-		helloSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
-		helloSwitcher.setFactory(new ViewFactory()
-		{
-			@Override
-			public View makeView()
-			{
-				helloSwitchText.setTextColor(Color.parseColor(""));
-				helloSwitchText.setGravity(Gravity.CENTER_HORIZONTAL);
-				return helloSwitchText;
-			}
-		});
-		helloSwitcher.setText(disableString);
+		fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
 	}
 
 	@Override

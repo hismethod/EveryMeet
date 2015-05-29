@@ -15,16 +15,17 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="22" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
-            android:name="kr.ac.kit.views.Activities.MainActivity_"
-            android:label="@string/app_name" >
+            android:name="kr.ac.kit.views.Activities.SplashActiivty_"
+            android:label="@string/title_activity_lobby" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,12 +33,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="kr.ac.kit.views.Activities.RoomActivity_"
+            android:name="kr.ac.kit.views.Activities.LobbyActivity_"
+            android:label="@string/title_activity_lobby"
+            android:windowSoftInputMode="adjustResize|adjustPan" >
+        </activity>
+        <activity
+            android:name="kr.ac.kit.views.Activities.HelloActivity_"
             android:label="@string/title_activity_room" >
         </activity>
         <activity
             android:name="kr.ac.kit.views.Activities.TestActivity_"
             android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name="kr.ac.kit.views.Activities.RoomActivity_"
+            android:label="@string/title_activity_room" >
+        </activity>
+        <activity
+            android:name="kr.ac.kit.views.Activities.CreateRoomActivity_"
+            android:label="@string/title_activity_create_room" >
+        </activity>
+        <activity
+            android:name="kr.ac.kit.views.Activities.RoomListActivity_"
+            android:label="@string/title_activity_create_room" >
         </activity>
     </application>
 

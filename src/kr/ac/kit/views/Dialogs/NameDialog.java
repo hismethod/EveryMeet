@@ -2,7 +2,10 @@ package kr.ac.kit.views.Dialogs;
 
 import com.gc.materialdesign.views.ButtonFlat;
 import com.rey.material.widget.EditText;
+import com.afollestad.*;
+import com.afollestad.materialdialogs.prefs.MaterialEditTextPreference;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
@@ -16,10 +19,12 @@ import kr.ac.kit.R;
 
 public class NameDialog
 {
-	private AlertDialog nameDialog;
 	private Context mContext;
+	private AlertDialog nameDialog;
+	private MaterialEditTextPreference nameDialog2;
 	private String name;
 	
+	public NameDialog(){}
 	public NameDialog(Context context, String title)
 	{
 		createDialog(context, title);
@@ -45,6 +50,19 @@ public class NameDialog
 		nameDialog = dialogBuilder.create();
 		nameDialog.setCancelable(false);                                                                        
 		nameDialog.setCanceledOnTouchOutside(false);
+	}
+	
+	public void createDialog2(Context context, String title)
+	{
+		nameDialog2 = new MaterialEditTextPreference(context);
+		nameDialog2.setTitle(title);
+		
+		nameDialog2.setText("여기에 내용?");
+	}
+	
+	public void showDialog2()
+	{
+		Dialog a = nameDialog2.getDialog();
 	}
 	
 	public void showDialog()
@@ -78,23 +96,15 @@ public class NameDialog
 			@Override
 			public void onClick(View v)
 			{
-				doWhenButtonClick();
+				doWhenSubmitButtonClick();
 			}
 		});
 	}
 	
-	public String getInputName()
-	{
-		EditText dialogInputName = (EditText) nameDialog.findViewById(R.id.initName);
-		return dialogInputName.getText().toString().trim();
-	}
-	
-	private void doWhenButtonClick()
+	private void doWhenSubmitButtonClick()
 	{
 		EditText dialogInputName = (EditText) nameDialog.findViewById(R.id.initName);
 		String inputName = dialogInputName.getText().toString().trim();
-		Toast toast = Toast.makeText(mContext, "User: " + inputName, Toast.LENGTH_LONG);
-		toast.show();
 		name = inputName;
 		nameDialog.dismiss();
 	}
