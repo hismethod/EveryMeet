@@ -10,6 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.JsonObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,12 +32,14 @@ public class CreateRoomActivity extends AppCompatActivity
 	@ViewById EditText createRoomTitleEdit;
 	@ViewById EditText createRoomPasswordEdit;
 	@ViewById EditText createRoomPasswordConfirmEdit;
-	
 	private MaterialDialog progressDialog;
+	
+	private Intent roomActivity;
 
 	@AfterInject
 	void init()
 	{
+		roomActivity = new Intent(this, RoomActivity_.class);
 	}
 	
 	@AfterViews
@@ -63,12 +66,14 @@ public class CreateRoomActivity extends AppCompatActivity
 		String password = createRoomPasswordConfirmEdit.getText().toString();
 		Room newRoom = new Room(Singleton.getInstance().getMe(), title, password);
 		
+		Singleton instance = Singleton.getInstance();
+		
 		progressDialog.show();
 		
-		RoomClient.createRoom(newRoom, new Callback<JsonObject>()
+		RoomClient.createRoom(title, password, instance.getMe().getName(), instance.getMe(), new Callback<String>()
 		{
 			@Override
-			public void success(JsonObject data, Response response)
+			public void success(String data, Response response)
 			{
 				Log.i("success", data.toString());
 				
@@ -85,6 +90,7 @@ public class CreateRoomActivity extends AppCompatActivity
 					public void run()
 					{
 						progressDialog.dismiss();
+						startActivity(roomActivity);
 					}
 				}, 2000);
 			}
@@ -95,6 +101,13 @@ public class CreateRoomActivity extends AppCompatActivity
 				Log.i("fail", retrofitError.toString());
 			}
 		});
+	}
+	
+	@Click(R.id.createRoomCancelBtn)
+	void onClickCancleBtn()
+	{
+		moveTaskToBack(false);
+		finish();
 	}
 	
 	@Override

@@ -12,7 +12,12 @@ import retrofit.http.POST;
 interface RoomREST
 {
 	@POST("/room/create")
-	void createRoom(@Body JsonObject room, Callback<JsonObject> callBack);
+	@FormUrlEncoded
+	void createRoom(
+			@Field("title") String title,
+			@Field("password") String password,
+			@Field("leaderName") String leaderName,
+			@Field("user") String jsonStringUser, Callback<String> callBack);
 	
 	@POST("/room/enter")
 	@FormUrlEncoded

@@ -1,16 +1,58 @@
 package kr.ac.kit.views.Activities;
 
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
+import com.skyfishjy.library.RippleBackground;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import kr.ac.kit.R;
+import kr.ac.kit.controller.MainController;
 
 
 @EActivity(R.layout.activity_room)
 public class RoomActivity extends AppCompatActivity
 {
+	@ViewById RippleBackground rippleBackground;
+	@ViewById ImageView micImageView;
+	private boolean nowRecording; 
+	private MainController mainController;
+	
+	@AfterInject
+	void init()
+	{
+		nowRecording = false;
+		mainController = new MainController();
+	}
+	
+	@AfterViews
+	void onCreate()
+	{
+		
+	}
+	
+	@Click(R.id.micImageView)
+	void onClickMicBtn()
+	{
+		if(!nowRecording)
+		{
+			nowRecording = true;
+			rippleBackground.startRippleAnimation();
+			mainController.startRecord();
+		}
+		else
+		{
+			nowRecording = false;
+			rippleBackground.stopRippleAnimation();
+			mainController.stopRecord(true);
+		}
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)

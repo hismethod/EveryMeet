@@ -2,6 +2,7 @@ package kr.ac.kit.room;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.androidannotations.annotations.AfterInject;
@@ -11,11 +12,15 @@ import org.androidannotations.annotations.RootContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import kr.ac.kit.R;
 import kr.ac.kit.listener.PrepareRoomListener;
 import kr.ac.kit.primitive.Room;
 import kr.ac.kit.primitive.Singleton;
@@ -28,15 +33,11 @@ import retrofit.client.Response;
 @EBean
 public class RoomListAdapter extends BaseAdapter
 {
-	List<Room> roomList;
+	@Bean(RealizedRoomFinder.class) RoomFinder roomFinder;
+	@RootContext Context context;
+	private PrepareRoomListener listener;
 
-	@Bean(RealizedRoomFinder.class)
-	RoomFinder roomFinder;
-
-	@RootContext
-	Context context;
-	
-	PrepareRoomListener listener;
+	private List<Room> roomList;
 
 	@AfterInject
 	void initAdapter()
@@ -85,10 +86,33 @@ public class RoomListAdapter extends BaseAdapter
 class RealizedRoomFinder implements RoomFinder
 {
 	private List<Room> roomList;
+	
+	@RootContext Context context;
+	
+	private MaterialDialog progressDialog;
+	
+	private MaterialDialog createProgressDialog(Context context)
+	{
+		return new MaterialDialog.Builder(context)
+				.title("잠시만요!")
+				.content("회의실 목록을 요청 중이에요")
+				.widgetColorRes(R.color.md_pink_500)
+				.progress(true, 0)
+				.build();
+	}
+	
+	@AfterInject
+	void init()
+	{
+		progressDialog = createProgressDialog(context);
+		progressDialog.setCancelable(false);
+		progressDialog.setCanceledOnTouchOutside(false);
+	}
 
 	@Override
 	public List<Room> findAll()
 	{
+		progressDialog.show();
 		roomList = new ArrayList<Room>();
 		RoomClient.listRoom(new Callback<Object>()
 		{
@@ -98,8 +122,8 @@ class RealizedRoomFinder implements RoomFinder
 				ObjectMapper mapper = new ObjectMapper();
 				try
 				{
-					roomList = mapper.readValue(Singleton.getInstance().gson.toJson(data),
-							new TypeReference<ArrayList<Room>>(){});
+					roomList.addAll((Collection<? extends Room>) mapper.readValue(Singleton.getInstance().gson.toJson(data),
+							new TypeReference<ArrayList<Room>>(){}));
 				}
 				catch (IOException e){e.printStackTrace();}
 			}
@@ -110,6 +134,15 @@ class RealizedRoomFinder implements RoomFinder
 				Log.e("fail", retrofitError.toString());
 			}
 		});
+		
+		new Handler().postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				progressDialog.dismiss();
+			}
+		}, 1000);
 		
 		return roomList;
 	}
