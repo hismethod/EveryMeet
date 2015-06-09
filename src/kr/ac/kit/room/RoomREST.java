@@ -32,4 +32,8 @@ interface RoomREST
 	@POST("/room/find")
 	@FormUrlEncoded
 	void findRoom(@Field("title") String title, Callback<JsonObject> callback);
+	
+	@POST("/room/userlist")
+	@FormUrlEncoded
+	void getUserList(@Field("title") String title, Callback<Object> callback);
 }

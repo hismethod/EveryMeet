@@ -47,5 +47,11 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+    
+    <style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme">
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+    </style>
    
 </resources>

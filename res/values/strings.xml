@@ -11,5 +11,7 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_create_room">새 회의실 개설</string>
     <string name="title_activity_lobby">여러분의 회의를 도와드립니다</string>
+    <string name="open_drawer">열기</string>
+    <string name="close_drawer">닫기</string>
 
 </resources>

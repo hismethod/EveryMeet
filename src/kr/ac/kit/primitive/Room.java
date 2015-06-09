@@ -16,9 +16,27 @@ public class Room
 	private String password;
 	private String leaderName;
 	private List<User> userList = new ArrayList<User>();
+	private List<String> messageList = new ArrayList<String>();
+	private List<String> checkList = new ArrayList<String>();
 	
 	/* Getter & Setter */
 	public String getTitle(){return title;}
+	public List<String> getMessageList()
+	{
+		return messageList;
+	}
+	public List<String> getCheckList()
+	{
+		return checkList;
+	}
+	public void setMessageList(List<String> messageList)
+	{
+		this.messageList = messageList;
+	}
+	public void setCheckList(List<String> checkList)
+	{
+		this.checkList = checkList;
+	}
 	public String getPassword(){return password;}
 	public String getLeaderName()	{return leaderName;}
 	public List<User> getUserList(){return userList;}
@@ -42,6 +60,18 @@ public class Room
 		this.title = title;
 		this.password = password;
 		this.leaderName = leader.getName();
+	}
+	
+	public Room(String title, String password, String leaderName, List<User> userList, List<String> messageList,
+			List<String> checkList)
+	{
+		super();
+		this.title = title;
+		this.password = password;
+		this.leaderName = leaderName;
+		this.userList = userList;
+		this.messageList = messageList;
+		this.checkList = checkList;
 	}
 	
 	/* Methods */

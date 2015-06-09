@@ -46,8 +46,6 @@ public class CreateRoomActivity extends AppCompatActivity
 	void onCreate()
 	{
 		progressDialog = createProgressDialog(this);
-		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(false);
 	}
 	
 	private MaterialDialog createProgressDialog(Context context)
@@ -62,7 +60,7 @@ public class CreateRoomActivity extends AppCompatActivity
 	@Click(R.id.createRoomSubmitBtn)
 	void onClickCreateRoomSubmitBtn()
 	{
-		String title = createRoomTitleEdit.getText().toString();
+		final String title = createRoomTitleEdit.getText().toString();
 		String password = createRoomPasswordConfirmEdit.getText().toString();
 		Room newRoom = new Room(Singleton.getInstance().getMe(), title, password);
 		
@@ -90,6 +88,8 @@ public class CreateRoomActivity extends AppCompatActivity
 					public void run()
 					{
 						progressDialog.dismiss();
+						roomActivity.putExtra("roomTitle", title);
+						roomActivity.putExtra("leaderName", Singleton.getInstance().getMe().getName());
 						startActivity(roomActivity);
 					}
 				}, 2000);
@@ -108,27 +108,5 @@ public class CreateRoomActivity extends AppCompatActivity
 	{
 		moveTaskToBack(false);
 		finish();
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.room, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings)
-		{
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

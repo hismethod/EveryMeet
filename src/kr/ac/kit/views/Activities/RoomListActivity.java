@@ -33,24 +33,15 @@ public class RoomListActivity extends AppCompatActivity
 	
 	private MaterialDialog progressDialog;
 	private Intent roomActivity;
-	String inputPassword = "";
-	
-	private MaterialDialog createProgressDialog(Context context)
-	{
-		return new MaterialDialog.Builder(context)
-				.title("잠시만요!")
-				.content("회의실 개설을 요청 중이에요")
-				.progress(true, 0)
-				.contentColor(R.color.md_pink_500)
-				.build();
-	}
+	private String password;
 	
 	@AfterInject
 	void init()
 	{
-		progressDialog = createProgressDialog(this);
+		progressDialog = buildProgressDialog();
 		progressDialog.setCancelable(false);
 		progressDialog.setCanceledOnTouchOutside(false);
+		roomActivity = new Intent(this, RoomActivity_.class);
 	}
 
 	@AfterViews
@@ -59,9 +50,17 @@ public class RoomListActivity extends AppCompatActivity
 //		progressDialog.show();
 		
 		roomListView.setAdapter(adapter);
-		roomActivity = new Intent(this, RoomActivity_.class);
 	}
-
+	
+	private MaterialDialog buildProgressDialog()
+	{
+		return new MaterialDialog.Builder(this)
+				.title("잠시만요!")
+				.content("회의실 개설을 요청 중이에요")
+				.progress(true, 0)
+				.build();
+	}
+	
 	@ItemClick(R.id.enterRoomListView)
 	void roomListItemClicked(final Room room)
 	{
@@ -74,7 +73,6 @@ public class RoomListActivity extends AppCompatActivity
         {
             @Override
             public void onInput(MaterialDialog dialog, CharSequence input) {
-            	inputPassword = input.toString();
             }
         })
         .positiveText("들어가기").callback(new ButtonCallback()
@@ -82,11 +80,13 @@ public class RoomListActivity extends AppCompatActivity
         	@Override
             public void onPositive(MaterialDialog dialog)
         	{
-        		RoomClient.enterRoom(room.getTitle(), inputPassword, Singleton.getInstance().getMe(), new Callback<String>()
+        		RoomClient.enterRoom(room.getTitle(), dialog.getInputEditText().getText().toString(), Singleton.getInstance().getMe(), new Callback<String>()
 				{
 					@Override
 					public void success(String arg0, Response arg1)
 					{
+						roomActivity.putExtra("roomTitle", room.getTitle());
+						roomActivity.putExtra("leaderName", arg0);
 						startActivity(roomActivity);
 					}
 					

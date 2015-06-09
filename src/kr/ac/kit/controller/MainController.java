@@ -1,5 +1,7 @@
 package kr.ac.kit.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,14 +12,14 @@ import android.os.Message;
 import android.util.Log;
 import kr.ac.kit.listener.RecognizeResponseListener;
 import kr.ac.kit.listener.RecorderListener;
+import kr.ac.kit.primitive.Singleton;
 import kr.ac.kit.util.AsyncDictationHTTPClient;
 import kr.ac.kit.util.Recorder;
-
 public class MainController
 {
 	private StringBuilder dialogStringStack = new StringBuilder();
 	
-	private NetworkController networkHandler = new NetworkController();
+	private NetworkController networkHandler = new NetworkController("202.31.202.188", 7777);
 
 	/************************ Media 객체들 *************************/
 	private MyTimerTask task = null;
@@ -25,6 +27,8 @@ public class MainController
 	private Timer timer = new Timer();
 	private MediaPlayer player = null;
 	private Recorder recorder;
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 	
 	long startTime = 0L;
 	long endTime = 0L;
@@ -46,8 +50,25 @@ public class MainController
 			Log.i("RecognizeResponseListener", "onTaskCompleted() 호출");
 			endTime = System.currentTimeMillis();
 			
-			Log.e("RecognizeResponseListener", "인식된문장 : " + sentence + "(" + ( endTime - startTime )/1000.0f + "초전)"); 
+			Date resultdate = new Date(startTime);
+			System.out.println(sdf.format(resultdate));
 			
+			Log.e("RecognizeResponseListener", "인식된문장 : " + sentence + "(" + ( endTime - startTime )/1000.0f + "초전)"); 
+			if(sentence.equals("<html>"))
+			{
+				return;
+			}
+			
+			Singleton instance = Singleton.getInstance();
+			StringBuilder messageBuilder = new StringBuilder(instance.getCurrentTitle());
+			messageBuilder.append("_");
+			messageBuilder.append(instance.getMe().getName());
+			messageBuilder.append("_");
+			messageBuilder.append(sentence);
+			messageBuilder.append("_");
+			messageBuilder.append(sdf.format(resultdate));
+			
+			networkHandler.sendMessage(messageBuilder.toString());
 			dialogStringStack.append(sentence);
 			dialogStringStack.append("\n");
 		}
@@ -78,6 +99,11 @@ public class MainController
 				return;
 		}
 	};
+	
+	public void sendFinishMeeting(String title)
+	{
+		networkHandler.sendFinish(title);
+	}
 	
 	public void startRecord()
 	{
@@ -149,6 +175,11 @@ public class MainController
 		player = null;
 	}
 	
+	public void exitRoom()
+	{
+		networkHandler.exitUser(Singleton.getInstance().getCurrentTitle(), Singleton.getInstance().getMe().getName());
+	}
+	
 	/******************* 스레드 관련 *******************/
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler()
@@ -169,7 +200,7 @@ public class MainController
 			{
 				recentAvg /= 3;
 				
-				if(recentAvg <= 6000)
+				if(recentAvg <= 5000)
 					continuous++;
 				else
 					continuous = 0;
@@ -180,7 +211,7 @@ public class MainController
 			
 			if(continuous >= 3)
 			{
-				if(time <= 3800)
+				if(time <= 2400)
 					stopRecord(false);
 				else
 					stopRecord(true);

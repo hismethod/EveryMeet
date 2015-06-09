@@ -10,7 +10,7 @@ import retrofit.RestAdapter;
 
 public class RoomClient
 {
-	public static String API_URL = "http://192.168.10.108:1337";
+	public static String API_URL = "http://202.31.202.188:1337";
 	private static Gson gson = new Gson();
 	
 	public static void createRoom(String title, String password, String leaderName, User user, Callback<String> callback)
@@ -43,5 +43,15 @@ public class RoomClient
 				.build();
 		RoomREST post = restAdapter.create(RoomREST.class);
 		post.listRoom(callback);
+	}
+	
+	public static void getUserList(String title, Callback<Object> callback)
+	{
+		RestAdapter restAdapter = new RestAdapter.Builder()
+				.setLogLevel(RestAdapter.LogLevel.HEADERS_AND_ARGS)
+				.setEndpoint(API_URL)
+				.build();
+		RoomREST post = restAdapter.create(RoomREST.class);
+		post.getUserList(title, callback);
 	}
 }

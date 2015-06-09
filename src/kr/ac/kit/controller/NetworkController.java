@@ -11,6 +11,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import android.util.Log;
+import kr.ac.kit.primitive.Singleton;
 
 public class NetworkController
 {
@@ -55,6 +56,16 @@ public class NetworkController
 		}
 		
 		socket.connect();
+		socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener()
+        {
+           @Override
+           public void call(Object... args)
+           {
+              exitUser(Singleton.getInstance().getCurrentTitle(), Singleton.getInstance().getMe().getName());
+           }
+        
+        });
+		enterUser(Singleton.getInstance().getCurrentTitle(), Singleton.getInstance().getMe().getName());
 	}
 	
 	/**
@@ -112,62 +123,55 @@ public class NetworkController
 		
 	}
 	
+	public void exitUser(String title, String userName)
+	{
+		socket.emit("exitUser", title, userName);
+	}
+	
+	public void enterUser(String title, String userName)
+	{
+		socket.emit("enterUser", title, userName);
+	}
+	
+	public void sendMessage(String message)
+	{
+		socket.emit("message", message);
+	}
+	
+	public void sendFinish(String title)
+	{
+		socket.emit("requestFinishMeeting", title);
+	}
+	
 	public void listen()
 	{
 		socket.on(Socket.EVENT_CONNECT, new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-			}
+        {
+           @Override
+           public void call(Object... args)
+           {
+              System.out.println("연결이벤트 발생");
+           }
+        
+        }).on("toclient", new Emitter.Listener()
+        {
+           @Override
+           public void call(Object... args)
+           {
+              JSONObject obj = (JSONObject) args[0];
+        
+              try
+              {
+                 System.out.println(obj.get("msg"));
+              } catch (JSONException e)
+              {
+                 e.printStackTrace();
+              }
+              System.out.print("메시지 입력 : ");
+           }
 
-		}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-				System.out.println("서버종료 이벤트 발생");
-				socket.disconnect();
-			}
-		}).on("toclient", new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-				JSONObject obj = (JSONObject) args[0];
-
-				try
-				{
-					System.out.println(obj.get("msg"));
-				} catch (JSONException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-		}).on("msg", new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-				JSONObject obj = (JSONObject) args[0];
-
-				try
-				{
-					System.out.println(obj.get("msg"));
-				} catch (JSONException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-		}).on("exit", new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-				socket.disconnect();
-			}
-		});
+        });
+        socket.connect();
 	}
+
 }
